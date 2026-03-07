@@ -2,6 +2,23 @@
 
 This repository contains scripts to migrate your Codex setup between machines.
 
+## One-Line Install
+
+**Codex:**
+```bash
+(tmpdir=$(mktemp -d) && trap 'rm -rf "$tmpdir"' EXIT && cd "$tmpdir" && curl -fsSLO https://github.com/chassis-app/bsol-codingagent/releases/latest/download/codex-backup-portable.tar.gz && curl -fsSLO https://github.com/chassis-app/bsol-codingagent/releases/latest/download/codex-backup-portable.SHA256SUMS && curl -fsSLO https://raw.githubusercontent.com/chassis-app/bsol-codingagent/main/restore_codex.sh && bash restore_codex.sh --archive codex-backup-portable.tar.gz)
+```
+
+**KiloCode:**
+```bash
+(tmpdir=$(mktemp -d) && trap 'rm -rf "$tmpdir"' EXIT && cd "$tmpdir" && curl -fsSLO https://github.com/chassis-app/bsol-codingagent/releases/latest/download/codex-backup-portable.tar.gz && curl -fsSLO https://github.com/chassis-app/bsol-codingagent/releases/latest/download/codex-backup-portable.SHA256SUMS && curl -fsSLO https://raw.githubusercontent.com/chassis-app/bsol-codingagent/main/restore_kilocode.sh && bash restore_kilocode.sh --archive codex-backup-portable.tar.gz)
+```
+
+**OpenCode:**
+```bash
+(tmpdir=$(mktemp -d) && trap 'rm -rf "$tmpdir"' EXIT && cd "$tmpdir" && curl -fsSLO https://github.com/chassis-app/bsol-codingagent/releases/latest/download/codex-backup-portable.tar.gz && curl -fsSLO https://github.com/chassis-app/bsol-codingagent/releases/latest/download/codex-backup-portable.SHA256SUMS && curl -fsSLO https://raw.githubusercontent.com/chassis-app/bsol-codingagent/main/restore_opencode.sh && bash restore_opencode.sh --archive codex-backup-portable.tar.gz)
+```
+
 ## Files
 - `backup_codex.sh`: create a backup archive, manifest, and checksums.
 - `restore_codex.sh`: verify and restore an archive to another machine.
