@@ -143,16 +143,17 @@ git push origin main 2>/dev/null || git push origin master 2>/dev/null || {
 echo ""
 echo "=== Step 6: Creating GitHub release ==="
 
-LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-if [[ -n "$LATEST_TAG" ]]; then
-  MAJOR=$(echo "$LATEST_TAG" | sed 's/v\([0-9]*\).*/\1/')
-  MINOR=$(echo "$LATEST_TAG" | sed 's/v[0-9]*\.\([0-9]*\).*/\1/')
-  PATCH=$(echo "$LATEST_TAG" | sed 's/v[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/')
-  NEW_PATCH=$((PATCH + 1))
-  NEW_TAG="v${MAJOR}.${MINOR}.${NEW_PATCH}"
-else
-  NEW_TAG="v1.0.0"
+TODAY=$(date -u +%Y%m%d)
+EXISTING_TAGS=$(git tag -l "${TODAY}.*" 2>/dev/null | sort -t. -k2 -n)
+SEQUENCE=1
+
+if [[ -n "$EXISTING_TAGS" ]]; then
+  LAST_TAG=$(echo "$EXISTING_TAGS" | tail -1)
+  LAST_SEQ=$(echo "$LAST_TAG" | cut -d. -f2)
+  SEQUENCE=$((LAST_SEQ + 1))
 fi
+
+NEW_TAG="${TODAY}.${SEQUENCE}"
 
 echo "Creating release: $NEW_TAG"
 
@@ -190,3 +191,8 @@ gh release create "$NEW_TAG" \
 echo ""
 echo "=== Done! ==="
 echo "Release: https://github.com/chassis-app/bsol-codingagent/releases/tag/$NEW_TAG"
+
+echo ""
+echo "=== Cleaning up backup files ==="
+rm -f *.tar.gz *.SHA256SUMS *.manifest.json
+echo "Cleaned up backup artifacts"
